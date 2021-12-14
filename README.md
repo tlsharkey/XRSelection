@@ -14,4 +14,4 @@ Unity will then import the package and display a series of errors in the Console
 
 Here are some of the various selection strategies/metaphors that may be implemented by this repo (unlikely I'll have the time to finish)
 
-![](./Resources/selection metaphors.png)
+![](https://github.com/tlsharkey/XRSelection/raw/main/Resources/selection%20metaphors.png)
