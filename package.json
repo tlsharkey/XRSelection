@@ -3,6 +3,6 @@
     "version": "0.0.1",
     "displayName": "XR Selection",
     "description": "Package to help with 3D selection in XR using MRTK",
-    "unity": "2017.1",
+    "unity": "2020.1",
     "dependencies": {}
 }

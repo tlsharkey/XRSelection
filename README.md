@@ -9,3 +9,9 @@ Go to the Package Manager window, press the add button, and select "Add package 
 Paste in this link: `https://github.com/tlsharkey/XRSelection.git`
 You may get an error saying import failed. **Paste in the link a second time.**
 Unity will then import the package and display a series of errors in the Console. Unity will automatically fix all of these, you can safely clear them.
+
+## Road Forward
+
+Here are some of the various selection strategies/metaphors that may be implemented by this repo (unlikely I'll have the time to finish)
+
+![](./Resources/selection metaphors.png)
