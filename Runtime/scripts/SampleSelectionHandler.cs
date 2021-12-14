@@ -5,13 +5,27 @@ using UnityEngine;
 [RequireComponent(typeof(XRSelection.Selection))]
 public class SampleSelectionHandler : MonoBehaviour
 {
-    public XRSelection.Selection selection;
+    private XRSelection.Selection selection;
     public KeyCode startSelectionKey = KeyCode.X;
 
     private void Start()
     {
         this.selection = this.GetComponent<XRSelection.Selection>();
         //this.selection.OnSelection.AddListener(this.OnSelection); // either call through unity actions (can be done through GUI)
+
+        // Only allow selection of objects of a type
+        //this.selection.SelectableTypes = new System.Type[] { typeof(LineRenderer) };
+
+        // Set Custom list of GameObjects
+        //this.selection.GameObjectFilter = () => { return GameObject.FindGameObjectsWithTag("asdf"); };
+
+        // Set Custom GameObject locations
+        //this.selection.ObjectPointsFunction = (gameObject) => {
+        //    LineRenderer lr = gameObject.GetComponent<LineRenderer>();
+        //    Vector3[] ret = new Vector3[lr.positionCount]; 
+        //    lr.GetPositions(ret);
+        //    return ret;
+        //};
     }
 
     private void Update()

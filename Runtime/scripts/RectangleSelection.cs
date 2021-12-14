@@ -74,7 +74,7 @@ namespace XRSelection
 
             Vector3[] region = new Vector3[] { start1, start2, end1, end2 };
 
-            var objects = GameObject.FindGameObjectsWithTag(this.TagName);
+            var objects = this.GameObjectFilter();
 
             List<Transform> selected = new List<Transform>();
             foreach (var obj in objects)

@@ -11,6 +11,8 @@ namespace XRSelection {
         protected Transform Hand2 { get { return this.selection.Hand2; } }
         protected Selection.SelectionBoundaryConidition BoundaryConidition { get { return this.selection.BoundaryCondition; } }
         protected string TagName { get { return this.selection.TagName; } }
+        protected Type[] SelectableTypes { get { return this.selection.SelectableTypes; } }
+        protected Func<GameObject[]> GameObjectFilter { get { return this.selection.GameObjectFilter; } }
         public GameObject visual;
         public Func<GameObject, Vector3[]> GetPointsToCheck = GetPointsFromGameObject;
 

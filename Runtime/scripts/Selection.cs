@@ -21,9 +21,21 @@ namespace XRSelection {
 
         public SelectionType selectionType = SelectionType.Rectangle;
         public SelectionBoundaryConidition BoundaryCondition = SelectionBoundaryConidition.Contains;
+        /// <summary>
+        /// Only select objects with this tag
+        /// </summary>
         [Tooltip("Only selects objects with this tag")]
         public string TagName = "Selectable";
-        
+        /// <summary>
+        /// Only allow selection of objects of a particular type
+        /// </summary>
+        public System.Type[] SelectableTypes;
+        /// <summary>
+        /// Custom function to generate an array of selectable GameObjects
+        /// </summary>
+        public System.Func<GameObject[]> GameObjectFilter;
+
+
         public Transform Hand1;
         public Transform Hand2;
 
@@ -68,6 +80,7 @@ namespace XRSelection {
                 }
             }
 
+            if (this.GameObjectFilter is null) this.GameObjectFilter = this.GetGameObjects;
             if (!(ObjectPointsFunction is null)) mode.GetPointsToCheck = ObjectPointsFunction;
             mode.Start();
         }
@@ -83,6 +96,30 @@ namespace XRSelection {
             Destroy(mode.visual);
             this.mode = null;
             return selected;
+        }
+
+        public GameObject[] GetGameObjects()
+        {
+            if (this.TagName.Length > 0)
+            {
+                return GameObject.FindGameObjectsWithTag(TagName);
+            }
+
+            if (this.SelectableTypes.Length > 0)
+            {
+                List<GameObject> objs = new List<GameObject>();
+                foreach (System.Type t in this.SelectableTypes)
+                {
+                    foreach (var obj in GameObject.FindObjectsOfType(t))
+                    {
+                        objs.Add((GameObject)obj);
+                    }
+                }
+                return objs.ToArray();
+            }
+
+            Debug.LogWarning("No Tag or Type has been set for checking which GameObjects can be selected. No objects will be selected.\nIf you want to select all objects, pass MonoBehaviour");
+            return new GameObject[0];
         }
     }
 }
