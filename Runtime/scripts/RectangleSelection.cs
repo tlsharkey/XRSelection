@@ -75,35 +75,21 @@ namespace XRSelection
             Vector3[] region = new Vector3[] { start1, start2, end1, end2 };
 
             var objects = GameObject.FindGameObjectsWithTag(this.TagName);
+
             List<Transform> selected = new List<Transform>();
             foreach (var obj in objects)
             {
                 bool inside = true;
-
-                MeshFilter[] filters = obj.GetComponentsInChildren<MeshFilter>();
-
-                // If object has a mesh, check if the mesh is contained
-                if (filters.Length>0)
+                Vector3[] points = this.GetPointsToCheck(obj);
+                foreach (Vector3 pt in points)
                 {
-                    foreach (MeshFilter filter in filters)
+                    if (!SelectionModality.PointInConvexPoly(pt, region))
                     {
-                        foreach (Vector3 vert in filter.mesh.vertices)
-                        {
-                            if (!SelectionModality.PointInConvexPoly(vert, region))
-                            {
-                                inside = false;
-                                break;
-                            }
-                        }
-                        if (!inside) break;
+                        inside = false;
+                        break;
                     }
                 }
-                // If object has no mesh, just check it's position
-                else
-                {
-                    Vector3 pos = obj.transform.position;
-                    inside = SelectionModality.PointInConvexPoly(pos, region);
-                }
+
 
                 if (inside) selected.Add(obj.transform);
             }

@@ -11,7 +11,7 @@ public class SampleSelectionHandler : MonoBehaviour
     private void Start()
     {
         this.selection = this.GetComponent<XRSelection.Selection>();
-        //this.selection.OnSelection.AddListener(this.OnSelection); // either call through unity actions
+        //this.selection.OnSelection.AddListener(this.OnSelection); // either call through unity actions (can be done through GUI)
     }
 
     private void Update()
@@ -33,7 +33,7 @@ public class SampleSelectionHandler : MonoBehaviour
         Color c = new Color(Random.Range(0, 1), Random.Range(0, 1), Random.Range(0, 1));
         foreach (var elm in elements)
         {
-            elm.gameObject.GetComponent<Material>().color = c;
+            Debug.Log("Selected " + elm.gameObject.name);
         }
     }
 }

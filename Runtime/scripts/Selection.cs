@@ -28,6 +28,17 @@ namespace XRSelection {
         public Transform Hand2;
 
         public UnityEvent<Transform[]> OnSelection = new UnityEvent<Transform[]>();
+        /// <summary>
+        /// Optional function to customize how GameObjects are detected as inside a selected region.
+        /// By default, GameObjects without meshes are 'inside' a region if their position is inside that region
+        /// GameObjects with meshes are 'inisde' if all of their vertices are inside that region.
+        /// 
+        /// This function allows you to pass a custom set of points for each GameObject
+        /// to be checked if inside the selection region.
+        /// You may want to implement a custom function if, for instance,
+        /// you need to select LineRenderers or other custom objects.
+        /// </summary>
+        public System.Func<GameObject, Vector3[]> ObjectPointsFunction = SelectionModality.GetPointsFromGameObject;
 
         private SelectionModality mode;
 
@@ -56,6 +67,8 @@ namespace XRSelection {
                         break;
                 }
             }
+
+            if (!(ObjectPointsFunction is null)) mode.GetPointsToCheck = ObjectPointsFunction;
             mode.Start();
         }
 
