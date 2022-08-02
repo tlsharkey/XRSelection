@@ -25,36 +25,47 @@ namespace XRSelection {
             this.selection = selection;
         }
 
-        public static bool PointInConvexPoly(Vector3 point, IEnumerable<Vector3> poly)
+        public static bool PointInConcaveCollider(Vector3 point, MeshCollider col)
         {
-            Mesh m = new Mesh();
-
-            // Get center of convex mesh
-            Vector3 average = Vector3.zero;
-            int numPoints = 0;
-            foreach (Vector3 vert in poly)
+            bool backface = Physics.queriesHitBackfaces;
+            Physics.queriesHitBackfaces = true;
+            // Raycast in all directions
+            for (int x = -1; x <= 1; x++)
             {
-                average += vert;
-                numPoints++;
-            }
-            average = average / numPoints;
+                for (int y = -1; y <= 1; y++)
+                {
+                    for (int z = -1; z <= 1; z++)
+                    {
+                        Vector3 direction = new Vector3(x, y, z);
+                        if (direction.magnitude < 0.5f) continue; // ignore (0, 0, 0) vector
 
-            // Check if point outside of poly
-            foreach (Vector3 vert in poly)
-            {
-                // Get 'normal vector' - just the vector from the center of the polygon through a point
-                Vector3 normal = (vert - average).normalized;
-                // if dot product is neg, point is behind vert
-                float infrontof = Vector3.Dot(point - vert, normal);
-                if (infrontof > 0) return false;
+                        Ray r = new Ray(point, direction);
+                        RaycastHit[] hits = Physics.RaycastAll(r);
+
+                        bool hit = false;
+                        for (int i = 0; i < hits.Length; i++)
+                        {
+                            if (hits[i].collider == col)
+                            {
+                                hit = true;
+                            }
+                        }
+                        if (!hit)
+                        {
+                            Physics.queriesHitBackfaces = backface;
+                            return false;
+                        }
+                    }
+                }
             }
 
+            Physics.queriesHitBackfaces = backface;
             return true;
         }
 
         public static bool PointInConvexMesh(Vector3 point, Mesh mesh)
         {
-            for (int i=0, j=0; i<mesh.triangles.Length; i+=3, j+=1)
+            for (int i = 0, j = 0; i < mesh.triangles.Length; i += 3, j += 1)
             {
                 // Get Plane
                 Vector3[] verts = {
